@@ -16,8 +16,8 @@ export default function Login() {
   const router = useRouter()
 
   const urlBackendLocal = 'http://localhost:5001/api/admin/auth/login'
-  const enpoint = '/api/admin/auth/login'
-  const urlBackendProdu = `${process.env.NEXT_PUBLIC_BACKEND_URL}${enpoint}`
+
+  const urlBackendProdu = 'https://events-backend-bot-app-production.up.railway.app/api/admin/auth/login'
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
