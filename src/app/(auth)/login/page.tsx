@@ -17,7 +17,7 @@ export default function Login() {
 
   const urlBackendLocal = 'http://localhost:5001/api/admin/auth/login'
   const enpoint = '/api/admin/auth/login'
-  const urlBackendProdu = `process.env.NEXT_PUBLIC_BACKEND_URL${enpoint}`
+  const urlBackendProdu = `${process.env.NEXT_PUBLIC_BACKEND_URL}${enpoint}`
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
