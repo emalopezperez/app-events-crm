@@ -17,12 +17,13 @@ export default function Login() {
 
   const urlBackendLocal = 'http://localhost:5001/api/admin/auth/login'
   const enpoint = '/api/admin/auth/login'
+  const urlBackendProdu = `process.env.NEXT_PUBLIC_BACKEND_URL${enpoint}`
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
     try {
-      const res = await fetch(urlBackendLocal, {
+      const res = await fetch(urlBackendProdu, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
