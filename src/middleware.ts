@@ -1,25 +1,18 @@
-import { NextRequest, NextResponse } from "next/server";
-import { decrypt } from "@/app/lib/session";
+import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server'
 
-const protectedRoutes = ["/"];
-const publicRoutes = ["/login"];
+const isPublicRoute = createRouteMatcher(['/sign-in(.*)'])
 
-export default async function middleware(req: NextRequest) {
-  const path = req.nextUrl.pathname;
-  const isProtectedRoute = protectedRoutes.includes(path);
-  const isPublicRoute = publicRoutes.includes(path);
-
-
-  const cookie = req.cookies.get("jwt")?.value;
-  const session = await decrypt(cookie);
-
-  if (isProtectedRoute && !session?.role) {
-    return NextResponse.redirect(new URL("/login", req.nextUrl));
+export default clerkMiddleware(async (auth, req) => {
+  if (!isPublicRoute(req)) {
+    await auth.protect()
   }
+})
 
-  if (isPublicRoute && session?.role && session?.role === "admin") {
-    return NextResponse.redirect(new URL("/", req.nextUrl));
-  }
-
-  return NextResponse.next();
+export const config = {
+  matcher: [
+    // Skip Next.js internals and all static files, unless found in search params
+    '/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)',
+    // Always run for API routes
+    '/(api|trpc)(.*)',
+  ],
 }
