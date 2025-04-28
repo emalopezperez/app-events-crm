@@ -1,58 +1,174 @@
 'use client'
 
+import type { Locale } from 'date-fns'
+import {
+  addMonths,
+  eachDayOfInterval,
+  endOfMonth,
+  format,
+  isSameDay,
+  isSameMonth,
+  isToday,
+  startOfMonth,
+  subMonths,
+} from 'date-fns'
 import { es } from 'date-fns/locale'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
-import type * as React from 'react'
-import { DayPicker } from 'react-day-picker'
+import * as React from 'react'
 
-import { buttonVariants } from '@/components/ui/button'
+import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 
-export type CalendarProps = React.ComponentProps<typeof DayPicker>
+export interface CalendarProps {
+  mode?: 'single' | 'range' | 'multiple'
+  selected?: Date | Date[] | { from: Date; to: Date }
+  onSelect?: (date: Date | undefined) => void
+  disabled?: (date: Date) => boolean
+  locale?: Locale
+  className?: string
+  classNames?: Record<string, string>
+  showOutsideDays?: boolean
+  month?: Date
+  onMonthChange?: (date: Date) => void
+}
 
-function Calendar({ className, classNames, showOutsideDays = true, locale = es, ...props }: CalendarProps) {
+function ModernCalendar({
+  mode = 'single',
+  selected,
+  onSelect,
+  disabled,
+  locale = es,
+  className,
+  classNames,
+  showOutsideDays = true,
+  month: externalMonth,
+  onMonthChange,
+}: CalendarProps) {
+  const [month, setMonth] = React.useState(() => externalMonth || new Date())
+
+  // Sincronizar con el mes externo si se proporciona
+  React.useEffect(() => {
+    if (externalMonth) {
+      setMonth(externalMonth)
+    }
+  }, [externalMonth])
+
+  // Manejar cambio de mes
+  const handleMonthChange = (newMonth: Date) => {
+    setMonth(newMonth)
+    onMonthChange?.(newMonth)
+  }
+
+  // Obtener días del mes actual
+  const daysInMonth = React.useMemo(() => {
+    const start = startOfMonth(month)
+    const end = endOfMonth(month)
+    return eachDayOfInterval({ start, end })
+  }, [month])
+
+  // Nombres de los días de la semana
+  const weekDays = React.useMemo(() => {
+    const weekDayNames = Array.from({ length: 7 }, (_, i) => {
+      return format(new Date(2021, 0, i + 3), 'EEEEEE', { locale })
+    })
+    return weekDayNames
+  }, [locale])
+
+  // Verificar si una fecha está seleccionada
+  const isDateSelected = (date: Date): boolean => {
+    if (!selected) return false
+
+    if (Array.isArray(selected)) {
+      return selected.some((selectedDate) => isSameDay(selectedDate, date))
+    }
+
+    if (selected instanceof Date) {
+      return isSameDay(selected, date)
+    }
+
+    if (typeof selected === 'object' && 'from' in selected && 'to' in selected) {
+      const { from, to } = selected
+      return date >= from && date <= to
+    }
+
+    return false
+  }
+
+  // Manejar clic en una fecha
+  const handleDateClick = (date: Date) => {
+    if (disabled?.(date)) return
+    onSelect?.(date)
+  }
+
   return (
-    <DayPicker
-      showOutsideDays={showOutsideDays}
-      className={cn('p-3', className)}
-      locale={locale}
-      classNames={{
-        months: 'flex flex-col sm:flex-row space-y-4 sm:space-x-4 sm:space-y-0',
-        month: 'space-y-4',
-        caption: 'flex justify-center pt-1 relative items-center',
-        caption_label: 'text-sm font-medium text-gray-900',
-        nav: 'space-x-1 flex items-center',
-        nav_button: cn(
-          buttonVariants({ variant: 'outline' }),
-          'h-7 w-7 bg-white p-0 text-gray-500 hover:bg-gray-100 hover:text-gray-900'
-        ),
-        nav_button_previous: 'absolute left-1',
-        nav_button_next: 'absolute right-1',
-        table: 'w-full border-collapse space-y-1',
-        head_row: 'flex',
-        head_cell: 'text-gray-500 rounded-md w-9 font-normal text-[0.8rem]',
-        row: 'flex w-full mt-2',
-        cell: 'h-9 w-9 text-center text-sm p-0 relative [&:has([aria-selected])]:bg-green-100 first:[&:has([aria-selected])]:rounded-l-md last:[&:has([aria-selected])]:rounded-r-md focus-within:relative focus-within:z-20',
-        day: cn(
-          buttonVariants({ variant: 'ghost' }),
-          'h-9 w-9 p-0 font-normal text-gray-900 aria-selected:opacity-100'
-        ),
-        day_selected: 'bg-green-600 text-white hover:bg-green-600 hover:text-white focus:bg-green-600 focus:text-white',
-        day_today: 'bg-gray-100 text-gray-900',
-        day_outside: 'text-gray-400 opacity-50',
-        day_disabled: 'text-gray-400 opacity-50',
-        day_range_middle: 'aria-selected:bg-green-100 aria-selected:text-gray-900',
-        day_hidden: 'invisible',
-        ...classNames,
-      }}
-      components={{
-        IconLeft: ({ ...props }) => <ChevronLeft className="h-4 w-4" />,
-        IconRight: ({ ...props }) => <ChevronRight className="h-4 w-4" />,
-      }}
-      {...props}
-    />
+    <div className={cn('p-3', className)}>
+      <div className="relative flex items-center justify-center pt-1">
+        <Button
+          variant="outline"
+          className={cn(
+            'h-7 w-7 rounded-md bg-[#252530] p-0 text-gray-300 hover:bg-[#333340] hover:text-white',
+            classNames?.nav_button_previous
+          )}
+          onClick={() => handleMonthChange(subMonths(month, 1))}
+        >
+          <ChevronLeft className="h-4 w-4" />
+        </Button>
+        <div className="mx-4 text-sm font-medium text-white">{format(month, 'MMMM yyyy', { locale })}</div>
+        <Button
+          variant="outline"
+          className={cn(
+            'h-7 w-7 rounded-md bg-[#252530] p-0 text-gray-300 hover:bg-[#333340] hover:text-white',
+            classNames?.nav_button_next
+          )}
+          onClick={() => handleMonthChange(addMonths(month, 1))}
+        >
+          <ChevronRight className="h-4 w-4" />
+        </Button>
+      </div>
+
+      <div className={cn('mt-4 grid grid-cols-7 gap-1', classNames?.month)}>
+        {/* Días de la semana */}
+        {weekDays.map((day) => (
+          <div key={day} className={cn('text-center text-xs font-medium text-gray-400', classNames?.head_cell)}>
+            {day}
+          </div>
+        ))}
+
+        {/* Días del mes */}
+        {daysInMonth.map((date) => {
+          const isSelected = isDateSelected(date)
+          const isDisabled = disabled?.(date) || false
+          const isCurrentMonth = isSameMonth(date, month)
+          const isCurrentDay = isToday(date)
+
+          return (
+            <Button
+              key={date.toString()}
+              variant="ghost"
+              size="icon"
+              className={cn(
+                'h-9 w-9 rounded-md p-0 text-sm font-normal',
+                isSelected
+                  ? 'bg-primary hover:bg-primary text-white hover:text-white'
+                  : 'text-gray-300 hover:bg-[#333340]',
+                isCurrentDay && !isSelected && 'bg-[#333340] text-white',
+                !isCurrentMonth && !showOutsideDays && 'invisible',
+                !isCurrentMonth && showOutsideDays && 'text-gray-500 opacity-50',
+                isDisabled && 'cursor-not-allowed text-gray-500 opacity-50',
+                classNames?.day
+              )}
+              disabled={isDisabled}
+              onClick={() => handleDateClick(date)}
+            >
+              {format(date, 'd')}
+            </Button>
+          )
+        })}
+      </div>
+    </div>
   )
 }
-Calendar.displayName = 'Calendar'
 
-export { Calendar }
+ModernCalendar.displayName = 'ModernCalendar'
+
+export { ModernCalendar }
