@@ -15,7 +15,7 @@ import {
 import { SidebarLayout } from '@/components/sidebar-layout'
 import { SignInButton, SignedOut, UserButton } from '@clerk/nextjs'
 import { Squares2X2Icon } from '@heroicons/react/16/solid'
-import { Cog6ToothIcon, QuestionMarkCircleIcon } from '@heroicons/react/20/solid'
+import { CalendarIcon, CameraIcon, Cog6ToothIcon, HomeIcon, QuestionMarkCircleIcon } from '@heroicons/react/20/solid'
 import { usePathname } from 'next/navigation'
 
 export function ApplicationLayout({ children }: { children: React.ReactNode }) {
@@ -47,8 +47,12 @@ export function ApplicationLayout({ children }: { children: React.ReactNode }) {
 
           <SidebarBody>
             <SidebarSection>
+              <SidebarItem href="/" current={pathname.startsWith('/')}>
+                <HomeIcon />
+                <SidebarLabel>Inicio</SidebarLabel>
+              </SidebarItem>
               <SidebarItem href="/events-generate-qr" current={pathname.startsWith('/events-generate-qr')}>
-                <Squares2X2Icon />
+                <CalendarIcon />
                 <SidebarLabel>Eventos Qr</SidebarLabel>
               </SidebarItem>
 
@@ -58,7 +62,7 @@ export function ApplicationLayout({ children }: { children: React.ReactNode }) {
               </SidebarItem>
 
               <SidebarItem href="/download-images-by-event" current={pathname.startsWith('/download-images-by-event')}>
-                <Squares2X2Icon />
+                <CameraIcon />
                 <SidebarLabel>Descargar fotos por evento</SidebarLabel>
               </SidebarItem>
 
