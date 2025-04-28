@@ -13,19 +13,12 @@ import {
   SidebarSpacer,
 } from '@/components/sidebar'
 import { SidebarLayout } from '@/components/sidebar-layout'
-import { getEvents } from '@/data'
 import { SignInButton, SignedOut, UserButton } from '@clerk/nextjs'
 import { Squares2X2Icon } from '@heroicons/react/16/solid'
-import { Cog6ToothIcon, HomeIcon, QuestionMarkCircleIcon } from '@heroicons/react/20/solid'
+import { Cog6ToothIcon, QuestionMarkCircleIcon } from '@heroicons/react/20/solid'
 import { usePathname } from 'next/navigation'
 
-export function ApplicationLayout({
-  events,
-  children,
-}: {
-  events: Awaited<ReturnType<typeof getEvents>>
-  children: React.ReactNode
-}) {
+export function ApplicationLayout({ children }: { children: React.ReactNode }) {
   let pathname = usePathname()
 
   const routes = [
@@ -54,19 +47,24 @@ export function ApplicationLayout({
 
           <SidebarBody>
             <SidebarSection>
-              <SidebarItem href="/" current={pathname === '/'}>
-                <HomeIcon />
-                <SidebarLabel>Home</SidebarLabel>
+              <SidebarItem href="/events-generate-qr" current={pathname.startsWith('/events-generate-qr')}>
+                <Squares2X2Icon />
+                <SidebarLabel>Eventos Qr</SidebarLabel>
+              </SidebarItem>
+
+              <SidebarItem href="/utilidad-generate-qr" current={pathname.startsWith('/utilidad-generate-qr')}>
+                <Squares2X2Icon />
+                <SidebarLabel>Utilidad QR</SidebarLabel>
+              </SidebarItem>
+
+              <SidebarItem href="/download-images-by-event" current={pathname.startsWith('/download-images-by-event')}>
+                <Squares2X2Icon />
+                <SidebarLabel>Descargar fotos por evento</SidebarLabel>
               </SidebarItem>
 
               <SidebarItem href="/settings" current={pathname.startsWith('/settings')}>
                 <Cog6ToothIcon />
                 <SidebarLabel>Settings</SidebarLabel>
-              </SidebarItem>
-
-              <SidebarItem href="/generate-qr" current={pathname.startsWith('/generate-qr')}>
-                <Squares2X2Icon />
-                <SidebarLabel>Generar QR</SidebarLabel>
               </SidebarItem>
             </SidebarSection>
 
