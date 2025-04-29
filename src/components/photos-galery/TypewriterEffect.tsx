@@ -27,17 +27,14 @@ export function TypewriterEffect({
   const timeoutRef = useRef<NodeJS.Timeout | null>(null)
 
   useEffect(() => {
-    // Reset when text changes
     setDisplayText('')
     setCurrentIndex(0)
     setIsTyping(false)
 
-    // Clear any existing timeout
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current)
     }
 
-    // Start with initial delay
     timeoutRef.current = setTimeout(() => {
       setIsTyping(true)
     }, delay)

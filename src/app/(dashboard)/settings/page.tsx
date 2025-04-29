@@ -7,6 +7,7 @@ import { Input } from '@/components/input'
 import { Select } from '@/components/select'
 import { Text } from '@/components/text'
 import { Textarea } from '@/components/textarea'
+
 import type { Metadata } from 'next'
 import { Address } from './address'
 
@@ -14,7 +15,7 @@ export const metadata: Metadata = {
   title: 'Settings',
 }
 
-export default function Settings() {
+export default async function Settings() {
   return (
     <form method="post" className="mx-auto max-w-4xl">
       <Heading>Settings</Heading>

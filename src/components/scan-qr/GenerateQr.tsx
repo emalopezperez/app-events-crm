@@ -195,9 +195,9 @@ export default function QRGenerator() {
   }
 
   return (
-    <main className="mx-auto">
+    <main className="mx-auto my-12">
       <div className="mx-auto max-w-4xl">
-        <Card className="border-2 border-gray-700 bg-gray-800 text-gray-100 shadow-lg">
+        <Card className="border-2 text-gray-100 shadow-lg">
           <CardHeader className="">
             <CardTitle className="flex items-center gap-2 text-lg text-white sm:text-xl">
               <QrCode className="h-5 w-5 text-cyan-400 sm:h-6 sm:w-6" />
@@ -373,7 +373,7 @@ export default function QRGenerator() {
         </AnimatePresence>
 
         {qrItems.length === 0 && (
-          <div className="mt-6 rounded-lg border-2 border-dashed border-gray-700 bg-gray-800 p-22 text-center">
+          <div className="mt-6 rounded-lg border-2 border-dashed p-22 text-center">
             <QrCode className="mx-auto h-10 w-10 text-gray-500" />
             <h3 className="mt-3 text-base font-semibold text-gray-200">No hay códigos QR generados</h3>
             <p className="mt-1 text-sm text-gray-400">

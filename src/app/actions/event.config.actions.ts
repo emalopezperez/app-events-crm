@@ -111,10 +111,9 @@ export async function getEvents() {
       throw new Error("No autorizado: Se requieren permisos de administrador")
     }
 
-    // Conectar a la base de datos
+  
     await connectToEventsConfig()
 
-    // Buscar eventos con un timeout más largo
     const events = await EventQr.find({}).sort({ createdAt: -1 })
 
     return JSON.parse(JSON.stringify(events))
@@ -206,7 +205,7 @@ export async function getActiveEvent() {
   }
 }
 
-// Función pública para verificar un código (ejemplo de endpoint público)
+
 export async function verifyEventCode(code: string) {
   try {
 

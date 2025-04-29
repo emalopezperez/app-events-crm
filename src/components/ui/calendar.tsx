@@ -46,27 +46,23 @@ function ModernCalendar({
 }: CalendarProps) {
   const [month, setMonth] = React.useState(() => externalMonth || new Date())
 
-  // Sincronizar con el mes externo si se proporciona
   React.useEffect(() => {
     if (externalMonth) {
       setMonth(externalMonth)
     }
   }, [externalMonth])
 
-  // Manejar cambio de mes
   const handleMonthChange = (newMonth: Date) => {
     setMonth(newMonth)
     onMonthChange?.(newMonth)
   }
 
-  // Obtener días del mes actual
   const daysInMonth = React.useMemo(() => {
     const start = startOfMonth(month)
     const end = endOfMonth(month)
     return eachDayOfInterval({ start, end })
   }, [month])
 
-  // Nombres de los días de la semana
   const weekDays = React.useMemo(() => {
     const weekDayNames = Array.from({ length: 7 }, (_, i) => {
       return format(new Date(2021, 0, i + 3), 'EEEEEE', { locale })
@@ -74,7 +70,6 @@ function ModernCalendar({
     return weekDayNames
   }, [locale])
 
-  // Verificar si una fecha está seleccionada
   const isDateSelected = (date: Date): boolean => {
     if (!selected) return false
 
@@ -94,7 +89,6 @@ function ModernCalendar({
     return false
   }
 
-  // Manejar clic en una fecha
   const handleDateClick = (date: Date) => {
     if (disabled?.(date)) return
     onSelect?.(date)
@@ -127,14 +121,12 @@ function ModernCalendar({
       </div>
 
       <div className={cn('mt-4 grid grid-cols-7 gap-1', classNames?.month)}>
-        {/* Días de la semana */}
         {weekDays.map((day) => (
           <div key={day} className={cn('text-center text-xs font-medium text-gray-400', classNames?.head_cell)}>
             {day}
           </div>
         ))}
 
-        {/* Días del mes */}
         {daysInMonth.map((date) => {
           const isSelected = isDateSelected(date)
           const isDisabled = disabled?.(date) || false

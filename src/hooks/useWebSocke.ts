@@ -48,6 +48,7 @@ export function useWebSocket() {
     try {
       const deploy = "https://events-backend-bot-app-production.up.railway.app"
       const local = "http://localhost:5001";
+      
 
       console.log('Attempting Socket.IO connection to:', deploy);
 

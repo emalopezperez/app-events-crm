@@ -1,34 +1,35 @@
 import { getMessages } from '@/app/actions/events.actions'
+
+import PhotoGrid from '@/components/events/event-photos/PhotoGrid'
+import DownloadButton from '@/components/photos-galery/DownloadButton'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 
-export default async function DownloadImagesByEvent() {
-  const messages = await getMessages()
+interface PageProps {
+  params: {}
+  searchParams: { [key: string]: string | string[] | undefined }
+}
 
-  console.log(messages)
+export default async function DownloadImagesByEvent({ searchParams }: PageProps) {
+  const messages = await getMessages()
+  const totalPhotos = messages.length
 
   return (
-    <main className="min-h-screen bg-[#0f0f18] p-6 md:p-12">
-      <Card className="mx-auto max-w-5xl border-[#333333] bg-[#1a1a25] text-white shadow-lg">
-        <CardHeader>
-          <CardTitle className="text-2xl font-bold text-white">Mensajes de WhatsApp</CardTitle>
+    <main className="mx-auto min-h-screen max-w-6xl border-none p-6 text-white shadow-none md:p-12">
+      <Card className="mx-auto max-w-6xl text-white shadow-lg">
+        <CardHeader className="flex flex-row items-center justify-between">
+          <CardTitle className="text-2xl font-bold text-white">Fotos del Evento</CardTitle>
+          <DownloadButton messages={messages} />
         </CardHeader>
         <CardContent>
           {messages && messages.length > 0 ? (
-            <div className="space-y-4">
-              <p className="mb-4 text-gray-400">Total de mensajes: {messages.length}</p>
-
-              <div className="grid gap-3">
-                {messages.map((message, index) => (
-                  <div key={message._id || index} className="rounded-md border border-[#333333] bg-[#252530] p-3">
-                    {message.text && <p className="mt-2 text-sm text-gray-300">{message.text}</p>}
-                  </div>
-                ))}
-              </div>
+            <div className="space-y-6">
+              <p className="mb-4 text-gray-400">Total de fotos: {totalPhotos}</p>
+              <PhotoGrid photos={messages} />
             </div>
           ) : (
             <div className="py-12 text-center">
-              <p className="text-gray-400">No se encontraron mensajes</p>
-              <p className="mt-2 text-sm text-gray-500">No hay mensajes disponibles en la base de datos</p>
+              <p className="text-gray-400">No se encontraron fotos</p>
+              <p className="mt-2 text-sm text-gray-500">No hay fotos disponibles en la base de datos</p>
             </div>
           )}
         </CardContent>
