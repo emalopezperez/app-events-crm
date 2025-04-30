@@ -197,14 +197,14 @@ export default function QRGenerator() {
   return (
     <main className="mx-auto my-12">
       <div className="mx-auto max-w-4xl">
-        <Card className="border-2 text-gray-100 shadow-lg">
-          <CardHeader className="">
-            <CardTitle className="flex items-center gap-2 text-lg text-white sm:text-xl">
+        <div className="text-gray-100">
+          <div className="">
+            <div className="flex items-center gap-2 text-lg text-white sm:text-xl">
               <QrCode className="h-5 w-5 text-cyan-400 sm:h-6 sm:w-6" />
               Crear nuevo código QR
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="">
+            </div>
+          </div>
+          <div className="">
             <div className="flex flex-col gap-3 sm:flex-row sm:gap-4">
               <div className="flex-1">
                 <Label htmlFor="qr-text" className="text-sm text-gray-200 sm:text-base">
@@ -236,8 +236,8 @@ export default function QRGenerator() {
                 </Button>
               </div>
             </div>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
 
         <AnimatePresence>
           {qrItems.length > 0 && (

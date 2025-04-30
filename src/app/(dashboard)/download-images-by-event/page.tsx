@@ -2,7 +2,6 @@ import { getMessages } from '@/app/actions/events.actions'
 
 import PhotoGrid from '@/components/events/event-photos/PhotoGrid'
 import DownloadButton from '@/components/photos-galery/DownloadButton'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 
 interface PageProps {
   params: {}
@@ -15,12 +14,12 @@ export default async function DownloadImagesByEvent({ searchParams }: PageProps)
 
   return (
     <main className="mx-auto min-h-screen max-w-6xl border-none p-6 text-white shadow-none md:p-12">
-      <Card className="mx-auto max-w-6xl text-white shadow-lg">
-        <CardHeader className="flex flex-row items-center justify-between">
-          <CardTitle className="text-2xl font-bold text-white">Fotos del Evento</CardTitle>
+      <div className="mx-auto max-w-6xl text-white shadow-lg">
+        <div className="flex flex-row items-center justify-between">
+          <h2 className="text-2xl font-bold text-white">Fotos del Evento</h2>
           <DownloadButton messages={messages} />
-        </CardHeader>
-        <CardContent>
+        </div>
+        <div>
           {messages && messages.length > 0 ? (
             <div className="space-y-6">
               <p className="mb-4 text-gray-400">Total de fotos: {totalPhotos}</p>
@@ -32,8 +31,8 @@ export default async function DownloadImagesByEvent({ searchParams }: PageProps)
               <p className="mt-2 text-sm text-gray-500">No hay fotos disponibles en la base de datos</p>
             </div>
           )}
-        </CardContent>
-      </Card>
+        </div>
+      </div>
     </main>
   )
 }

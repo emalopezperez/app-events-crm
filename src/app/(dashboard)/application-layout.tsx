@@ -58,19 +58,9 @@ export function ApplicationLayout({ children }: { children: React.ReactNode }) {
                 <SidebarLabel>Eventos Qr</SidebarLabel>
               </SidebarItem>
 
-              <SidebarItem href="/utilidad-generate-qr" current={pathname.startsWith('/utilidad-generate-qr')}>
-                <Squares2X2Icon />
-                <SidebarLabel>Generar QR</SidebarLabel>
-              </SidebarItem>
-
               <SidebarItem href="/download-images-by-event" current={pathname.startsWith('/download-images-by-event')}>
                 <CameraIcon />
                 <SidebarLabel>Descargar fotos</SidebarLabel>
-              </SidebarItem>
-
-              <SidebarItem href="/settings" current={pathname.startsWith('/settings')}>
-                <Cog6ToothIcon />
-                <SidebarLabel>Settings</SidebarLabel>
               </SidebarItem>
             </SidebarSection>
 
@@ -81,6 +71,20 @@ export function ApplicationLayout({ children }: { children: React.ReactNode }) {
                   {event.name}
                 </SidebarItem>
               ))}
+            </SidebarSection>
+
+            <SidebarSection className="max-lg:hidden">
+              <SidebarHeading>Herramientas</SidebarHeading>
+
+              <SidebarItem href="/utilidad-generate-qr" current={pathname.startsWith('/utilidad-generate-qr')}>
+                <Squares2X2Icon />
+                <SidebarLabel>Generar QR</SidebarLabel>
+              </SidebarItem>
+
+              <SidebarItem href="/settings" current={pathname.startsWith('/settings')}>
+                <Cog6ToothIcon />
+                <SidebarLabel>Settings</SidebarLabel>
+              </SidebarItem>
             </SidebarSection>
 
             <SidebarSpacer />

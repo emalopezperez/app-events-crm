@@ -33,7 +33,7 @@ const nextConfig = {
     ignoreBuildErrors: true,
   },
   images: {
-    domains: ['tu-backend.com'],
+    domains: ['res.cloudinary.com'],
   },
 }
 
